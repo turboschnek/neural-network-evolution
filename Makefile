@@ -15,7 +15,7 @@ BINNAME= perceptron
 default: build clean
 
 build: makedir $(OBJFILES)
-	$(CC) $(CFLAGS) $(LIBS) $(OBJFILES) -o $(BINDIR)/$(BINNAME)
+	$(CC) $(CFLAGS) $(OBJFILES) $(LIBS) -o $(BINDIR)/$(BINNAME)
 
 %.o : $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@

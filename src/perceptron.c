@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 Tneuron* initNeuron(int inputCount, float* weights, float bias)
@@ -23,16 +24,19 @@ Tneuron* initNeuron(int inputCount, float* weights, float bias)
   return n;
 }
 
+
 void freeNeuron(Tneuron* n)
 {
   free(n->weights);
   free(n);
 }
 
+
 void printNeuron(const Tneuron* n)
 {
   fprintNeuron(stdout, n);
 }
+
 
 void fprintNeuron(FILE* out, const Tneuron* n)
 {
@@ -43,10 +47,12 @@ void fprintNeuron(FILE* out, const Tneuron* n)
   fprintf(out, "\n%f\n", n->bias);
 }
 
+
 Tneuron* scanNeuron(void)
 {
   return fscanNeuron(stdin);
 }
+
 
 Tneuron* fscanNeuron(FILE* in)
 {
@@ -68,4 +74,20 @@ Tneuron* fscanNeuron(FILE* in)
   }
 
   return n;
+}
+
+
+float sigmoid(float x)
+{
+  return 1 / (1 + exp(-x));
+}
+
+
+float calcNeuronOutput(const Tneuron* n, float* inputs)
+{
+  float sum = 0;
+  for(int i = 0; i < n->inputCount; i++){
+    sum += inputs[i] * n->weights[i];
+  }
+  return sigmoid(sum * n->bias);
 }

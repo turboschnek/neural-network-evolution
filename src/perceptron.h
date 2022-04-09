@@ -34,4 +34,12 @@ Tneuron* scanNeuron(void);
 
 Tneuron* fscanNeuron(FILE* in);
 
+/**
+ * y = 1/(1+e^(-x))
+ * https://en.wikipedia.org/wiki/Logistic_function
+ */
+float sigmoid(float x);
+
+float calcNeuronOutput(const Tneuron* n, float* inputs);
+
 #endif
