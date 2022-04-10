@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 
 Tneuron* initNeuron(int inputCount, float* weights, float bias)
@@ -21,6 +22,20 @@ Tneuron* initNeuron(int inputCount, float* weights, float bias)
     n->weights[i] = weights[i];
   }
   n->bias = bias;
+  return n;
+}
+
+
+Tneuron* initRandNeuron(int inputCount, float min, float max)
+{
+  srand(time(NULL));
+  Tneuron *n = malloc(sizeof(Tneuron));
+  n->inputCount = inputCount;
+  n->weights = malloc(n->inputCount * sizeof(float));
+  for(int i = 0; i < n->inputCount; ++i){
+    n->weights[i] = (((float)rand()/(float)(RAND_MAX)) * (max-min)) + min;
+  }
+  n->bias = (((float)rand()/(float)(RAND_MAX)) * (max-min)) + min;
   return n;
 }
 

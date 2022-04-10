@@ -24,14 +24,47 @@ typedef struct {
  */
 Tneuron* initNeuron(int inputCount, float* weights, float bias);
 
+/**
+ * returns pointer to Tneuron initialized with
+ * random weights and bias between min and max values
+ */
+Tneuron* initRandNeuron(int inputCount, float min, float max);
+
+/**
+ * frees neuron
+ */
 void freeNeuron(Tneuron* n);
 
+/**
+ * prints neuron in format:  
+ * inputCount  
+ * weights  
+ * bias
+ */
 void printNeuron(const Tneuron* n);
 
+/**
+ * prints neuron to file in format:  
+ * inputCount  
+ * weights  
+ * bias
+ */
 void fprintNeuron(FILE* out, const Tneuron* n);
 
+/**
+ * scans neuron in format:  
+ * inputCount  
+ * weights  
+ * bias
+ */
 Tneuron* scanNeuron(void);
 
+/**
+ * scans neuron from file in format:  
+ * inputCount  
+ * weights  
+ * bias
+ */
 Tneuron* fscanNeuron(FILE* in);
 
 /**

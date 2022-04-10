@@ -12,7 +12,7 @@
 
 void neuronTest()
 {
-  Tneuron* n = scanNeuron();
+  Tneuron* n = initRandNeuron(2, -1, 1);
   printNeuron(n);
 
   float* inputs = malloc(n->inputCount * sizeof(float));
