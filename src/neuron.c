@@ -1,10 +1,10 @@
 /**
- * Project:  perceptron
+ * Project:  neural network
  * Author:   Jakub Urbanek
  * Year:     2022
  */
 
-#include "perceptron.h"
+#include "neuron.h"
 
 
 #include <stdio.h>

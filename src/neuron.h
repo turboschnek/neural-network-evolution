@@ -1,11 +1,11 @@
 /**
- * Project:  perceptron
+ * Project:  neural network
  * Author:   Jakub Urbanek
  * Year:     2022
  */
 
-#ifndef __MODULE_PERCEPTRON_H
-#define __MODULE_PERCEPTRON_H
+#ifndef __MODULE_NEURON_H
+#define __MODULE_NEURON_H
 
 #include <stdio.h>
 
