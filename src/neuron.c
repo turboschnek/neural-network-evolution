@@ -28,7 +28,6 @@ Tneuron* initNeuron(int inputCount, float* weights, float bias)
 
 Tneuron* initRandNeuron(int inputCount, float min, float max)
 {
-  srand(time(NULL));
   Tneuron *n = malloc(sizeof(Tneuron));
   n->inputCount = inputCount;
   n->weights = malloc(n->inputCount * sizeof(float));

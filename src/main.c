@@ -10,25 +10,17 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 
 void neuronTest()
 {
   Tneuron* n = initRandNeuron(2, -1, 1);
   printNeuron(n);
 
-  float* inputs = malloc(n->inputCount * sizeof(float));
-  
-  printf("inputs:\n");
-  for(int i = 0; i < n->inputCount; i++){
-    if(scanf("%f", &inputs[i]) != 1){
-      fprintf(stderr,"error while reading input");
-      return;
-    }
-  }
+  float inputs[2] = {1, 1};
 
   printf("output: %f\n\n", calcNeuronOutput(n, inputs));
-
-  free(inputs);
 
   freeNeuron(n);
 }
@@ -45,8 +37,20 @@ void sigmoidTest()
 }
 
 
-int main(){
-  neuronTest();
+void fcnnTest()
+{
+  int temp[3] = {10, 2, 1};
+  Tfcnn* n = initRandfcnn(3, temp);
 
-  sigmoidTest();
+  printfcnn(n);
+
+  freefcnn(n);
+}
+
+
+int main(){
+  srand(time(NULL));
+  //neuronTest();
+  //sigmoidTest();
+  fcnnTest();
 }

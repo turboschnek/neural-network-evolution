@@ -22,14 +22,22 @@ typedef struct
   int* neuronsInLayersCount;
 
   //pointers to all neurons in network
-  Tneuron*** neuron;
+  Tneuron*** neurons;
 
 } Tfcnn;
 
 /**
  * intits random fully connected neural network of given size
  */
-Tfcnn* initRandNeuralNet(int layerCount, int* neuronsInLayersCount);
+Tfcnn* initRandfcnn(int layerCount, int* neuronsInLayersCount);
 
+/**
+ * frees fully connected neural network
+ */
+void freefcnn(Tfcnn* net);
+
+void printfcnn(const Tfcnn* n);
+
+void fprintfcnn(FILE* out, const Tfcnn* n);
 
 #endif
