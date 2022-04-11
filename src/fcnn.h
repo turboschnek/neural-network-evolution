@@ -40,4 +40,8 @@ void printfcnn(const Tfcnn* n);
 
 void fprintfcnn(FILE* out, const Tfcnn* n);
 
+Tfcnn* scanfcnn(void);
+
+Tfcnn* fscanfcnn(FILE* in);
+
 #endif

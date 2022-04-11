@@ -39,11 +39,23 @@ void sigmoidTest()
 
 void fcnnTest()
 {
-  int temp[3] = {10, 2, 1};
-  Tfcnn* n = initRandfcnn(3, temp);
+  int temp[4] = {784, 256, 100, 10};
+  Tfcnn* n = initRandfcnn(4, temp);
 
-  printfcnn(n);
+  FILE* log;
+  log = fopen("log.txt", "w");
+  fprintfcnn(log, n);
+  fclose(log);
 
+  log = fopen("log.txt", "r");
+  Tfcnn* n2 =fscanfcnn(log);
+  fclose(log);
+
+  log = fopen("log2.txt", "w");
+  fprintfcnn(log, n2);
+  fclose(log);
+
+  freefcnn(n2);
   freefcnn(n);
 }
 

@@ -48,6 +48,7 @@ void freefcnn(Tfcnn* n)
   }
   free(n->neuronsInLayersCount);
   free(n->neurons);
+  free(n);
 }
 
 void printfcnn(const Tfcnn* n)
@@ -58,9 +59,56 @@ void printfcnn(const Tfcnn* n)
 
 void fprintfcnn(FILE* out, const Tfcnn* n)
 {
+  fprintf(out, "%d\n", n->layerCount);
+
+  for(int i = 0; i < n->layerCount; ++i){
+    fprintf(out, "%d ", n->neuronsInLayersCount[i]);
+  }
+  fprintf(out, "\n");
+
   for(int i = 1; i < n->layerCount; ++i){
     for(int j = 0; j < n->neuronsInLayersCount[i]; ++j){
       fprintNeuron(out, n->neurons[i-1][j]);
     }
   }
 }
+
+Tfcnn* scanfcnn(void)
+{
+  return fscanfcnn(stdin);
+}
+
+Tfcnn* fscanfcnn(FILE* in)
+{
+  Tfcnn* n = malloc(sizeof(Tfcnn));
+  if(fscanf(in, "%d", &n->layerCount) != 1){
+    return NULL;
+  }
+
+  n->neuronsInLayersCount = malloc(n->layerCount * sizeof(int));
+  n->neurons = malloc((n->layerCount-1) * sizeof(Tneuron**));
+
+  if(fscanf(in, "%d", &n->neuronsInLayersCount[0]) != 1){
+      return NULL;
+    }
+  for(int i = 1; i < n->layerCount; ++i){
+     if(fscanf(in, "%d", &n->neuronsInLayersCount[i]) != 1){
+      return NULL;
+    }
+    n->neurons[i-1] = malloc(n->neuronsInLayersCount[i] * sizeof(Tneuron*));
+  }
+
+
+  for(int i = 1; i < n->layerCount; ++i){
+    for(int j = 0; j < n->neuronsInLayersCount[i]; ++j){
+      n->neurons[i-1][j] = fscanNeuron(in);
+      if(n->neurons[i-1][j] == NULL){
+        return NULL;
+      }
+    }
+  }
+
+  return n;
+}
+
+
