@@ -29,3 +29,6 @@ clean:
 
 run:
 	cd $(BINDIR); ./$(BINNAME)
+
+run-valgrind:
+	cd $(BINDIR); valgrind --leak-check=full ./$(BINNAME)

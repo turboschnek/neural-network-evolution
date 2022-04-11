@@ -39,7 +39,9 @@ void sigmoidTest()
 
 void fcnnTest()
 {
-  int temp[4] = {784, 256, 100, 10};
+  int oLa = 10;
+  
+  int temp[4] = {4, 2, 3, oLa};
   Tfcnn* n = initRandfcnn(4, temp);
 
   FILE* log;
@@ -54,6 +56,15 @@ void fcnnTest()
   log = fopen("log2.txt", "w");
   fprintfcnn(log, n2);
   fclose(log);
+
+  float inp[4] = {1, 0, 0.5, 0.1};
+  float* output = predict(n, inp);
+
+  for(int i = 0; i < oLa; ++i){
+    printf("%d -> %f\n", i, output[i]);
+  }
+
+  free(output);
 
   freefcnn(n2);
   freefcnn(n);

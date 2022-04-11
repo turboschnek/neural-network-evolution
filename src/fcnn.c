@@ -8,6 +8,7 @@
 #include "neuron.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #define MIN_RAND_WEIGHT -1.0
 #define MAX_RAND_WEIGHT 1.0
@@ -111,4 +112,37 @@ Tfcnn* fscanfcnn(FILE* in)
   return n;
 }
 
+float* propagateLayer(Tfcnn* net, float* inputs, int layerIndex)
+{
+  float* output = malloc(net->neuronsInLayersCount[layerIndex] *
+                         sizeof(float));
 
+  for(int i = 0; i < net->neuronsInLayersCount[layerIndex]; ++i){
+    output[i] = calcNeuronOutput(net->neurons[layerIndex-1][i], inputs);
+  }
+
+  return output;
+}
+
+float* predict(Tfcnn* net, float* inputs)
+{
+  float* b;
+
+  float* a = malloc(net->neuronsInLayersCount[0] * sizeof(float));
+  memcpy(a, inputs, net->neuronsInLayersCount[0] * sizeof(float));
+
+  
+  for(int i = 1; i < net->layerCount; ++i){
+    b = propagateLayer(net, a, i);
+
+    a = realloc(a, net->neuronsInLayersCount[i] * sizeof(float));
+
+    memcpy(a, b, net->neuronsInLayersCount[i] * sizeof(float));
+
+    free(b);
+  }
+
+
+
+  return a;
+}

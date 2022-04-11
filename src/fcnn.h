@@ -44,4 +44,8 @@ Tfcnn* scanfcnn(void);
 
 Tfcnn* fscanfcnn(FILE* in);
 
+float* propagateLayer(Tfcnn* net, float* inputs, int layerIndex);
+
+float* predict(Tfcnn* net, float* inputs);
+
 #endif
