@@ -131,7 +131,6 @@ float* predict(Tfcnn* net, float* inputs)
   float* a = malloc(net->neuronsInLayersCount[0] * sizeof(float));
   memcpy(a, inputs, net->neuronsInLayersCount[0] * sizeof(float));
 
-  
   for(int i = 1; i < net->layerCount; ++i){
     b = propagateLayer(net, a, i);
 
@@ -142,7 +141,30 @@ float* predict(Tfcnn* net, float* inputs)
     free(b);
   }
 
-
-
   return a;
+}
+
+Tfcnn* sex(Tfcnn* dad, Tfcnn* mum)
+{
+  #warning sex not implemented
+  
+  /*
+  Tfcnn* baby = malloc(sizeof(Tfcnn));
+  baby->layerCount = dad->layerCount;
+  baby->neuronsInLayersCount = malloc(baby->layerCount * sizeof(int));
+  baby->neurons = malloc((baby->layerCount-1) * sizeof(Tneuron**));
+
+  baby->neuronsInLayersCount[0] = dad->neuronsInLayersCount[0];
+
+  for(int i = 1; i < baby->layerCount; ++i){
+    baby->neuronsInLayersCount[i] = dad->neuronsInLayersCount[i];
+
+    baby->neurons[i-1] = malloc(baby->neuronsInLayersCount[i] * sizeof(Tneuron*));
+    for(int j = 0; j < baby->neuronsInLayersCount[i]; ++j){
+      baby->neurons[i-1][j] = initRandNeuron(baby->neuronsInLayersCount[i-1],
+                                          MIN_RAND_WEIGHT,
+                                          MAX_RAND_WEIGHT);
+    }
+  }
+  */
 }

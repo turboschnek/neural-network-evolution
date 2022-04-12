@@ -48,4 +48,6 @@ float* propagateLayer(Tfcnn* net, float* inputs, int layerIndex);
 
 float* predict(Tfcnn* net, float* inputs);
 
+Tfcnn* sex(Tfcnn* dad, Tfcnn* mum);
+
 #endif
