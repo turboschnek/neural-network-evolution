@@ -29,7 +29,7 @@ typedef struct
 /**
  * intits random fully connected neural network of given size
  */
-Tfcnn* initRandfcnn(int layerCount, int* neuronsInLayersCount);
+Tfcnn* initRandfcnn(int layerCount, const int* neuronsInLayersCount);
 
 /**
  * frees fully connected neural network
@@ -44,10 +44,17 @@ Tfcnn* scanfcnn(void);
 
 Tfcnn* fscanfcnn(FILE* in);
 
-float* propagateLayer(Tfcnn* net, float* inputs, int layerIndex);
+float* propagateLayer(const Tfcnn* net, const float* inputs, int layerIndex);
 
-float* predict(Tfcnn* net, float* inputs);
+float* predict(const Tfcnn* net, const float* inputs);
 
-Tfcnn* sex(Tfcnn* dad, Tfcnn* mum);
+/**
+ * returns baby of mum and dad in parameters
+ * 
+ * @param mutationRareness 1 in $(mutationRareness) neurons gets randomized
+ *  
+ * @note mum and dad must have the number of layers and neurons in them
+ */
+Tfcnn* sex(const Tfcnn* dad, const Tfcnn* mum, int mutationRareness);
 
 #endif

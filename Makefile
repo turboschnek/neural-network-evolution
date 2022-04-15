@@ -6,7 +6,7 @@ CC = gcc
 CFLAGS = -Wall -g -O3
 LIBS= -lm
 
-OBJFILES= main.o fcnn.o neuron.o
+OBJFILES= main.o evolutionTest.o fcnn.o neuron.o
 
 SRCDIR= src
 BINDIR= bin

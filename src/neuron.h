@@ -22,7 +22,7 @@ typedef struct {
  * returns pointer to Tneuron initialized with
  * weights and bias in parameters
  */
-Tneuron* initNeuron(int inputCount, float* weights, float bias);
+Tneuron* initNeuron(int inputCount, const float* weights, float bias);
 
 /**
  * returns pointer to Tneuron initialized with
@@ -54,7 +54,7 @@ void fprintNeuron(FILE* out, const Tneuron* n);
 /**
  * scans neuron in format:  
  * inputCount  
- * weights  
+ * weight1 weight2 weight3 ... weightinputCount  
  * bias
  */
 Tneuron* scanNeuron(void);
@@ -62,10 +62,15 @@ Tneuron* scanNeuron(void);
 /**
  * scans neuron from file in format:  
  * inputCount  
- * weights  
+ * weight1 weight2 weight3 ... weightinputCount  
  * bias
  */
 Tneuron* fscanNeuron(FILE* in);
+
+/**
+ * returns copy of neuron in parameter
+ */
+Tneuron* cpyNeuron(const Tneuron* origin);
 
 /**
  * y = 1/(1+e^(-x))
@@ -73,6 +78,6 @@ Tneuron* fscanNeuron(FILE* in);
  */
 float sigmoid(float x);
 
-float calcNeuronOutput(const Tneuron* n, float* inputs);
+float calcNeuronOutput(const Tneuron* n, const float* inputs);
 
 #endif

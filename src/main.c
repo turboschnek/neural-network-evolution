@@ -7,6 +7,7 @@
 
 #include "fcnn.h"
 #include "neuron.h"
+#include "evolutionTest.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,5 +74,6 @@ int main(){
   srand(time(NULL));
   //neuronTest();
   //sigmoidTest();
-  fcnnTest();
+  //fcnnTest();
+  evolutionTest();
 }

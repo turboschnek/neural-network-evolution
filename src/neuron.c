@@ -13,7 +13,7 @@
 #include <time.h>
 
 
-Tneuron* initNeuron(int inputCount, float* weights, float bias)
+Tneuron* initNeuron(int inputCount, const float* weights, float bias)
 {
   Tneuron *n = malloc(sizeof(Tneuron));
   n->inputCount = inputCount;
@@ -90,6 +90,20 @@ Tneuron* fscanNeuron(FILE* in)
   return n;
 }
 
+Tneuron* cpyNeuron(const Tneuron* origin)
+{
+  Tneuron* n = malloc(sizeof(Tneuron));
+
+  n->inputCount = origin->inputCount;
+  n->weights = malloc(n->inputCount * sizeof(float));
+  for(int i = 0; i < n->inputCount; ++i){
+    n->weights[i] = origin->weights[i];
+  }
+  n->bias = origin->bias;
+
+  return n;
+}
+
 
 float sigmoid(float x)
 {
@@ -97,11 +111,11 @@ float sigmoid(float x)
 }
 
 
-float calcNeuronOutput(const Tneuron* n, float* inputs)
+float calcNeuronOutput(const Tneuron* n, const float* inputs)
 {
   float sum = 0;
   for(int i = 0; i < n->inputCount; i++){
     sum += inputs[i] * n->weights[i];
   }
-  return sigmoid(sum * n->bias);
+  return sigmoid(sum + n->bias);
 }

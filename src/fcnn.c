@@ -9,12 +9,13 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-#define MIN_RAND_WEIGHT -1.0
-#define MAX_RAND_WEIGHT 1.0
+#define MIN_RAND_WEIGHT -100
+#define MAX_RAND_WEIGHT 100
 
 
-Tfcnn* initRandfcnn(int layerCount, int* neuronsInLayersCount)
+Tfcnn* initRandfcnn(int layerCount, const int* neuronsInLayersCount)
 {
   //there are no neurons in first layer
 
@@ -112,7 +113,7 @@ Tfcnn* fscanfcnn(FILE* in)
   return n;
 }
 
-float* propagateLayer(Tfcnn* net, float* inputs, int layerIndex)
+float* propagateLayer(const Tfcnn* net, const float* inputs, int layerIndex)
 {
   float* output = malloc(net->neuronsInLayersCount[layerIndex] *
                          sizeof(float));
@@ -124,7 +125,7 @@ float* propagateLayer(Tfcnn* net, float* inputs, int layerIndex)
   return output;
 }
 
-float* predict(Tfcnn* net, float* inputs)
+float* predict(const Tfcnn* net, const float* inputs)
 {
   float* b;
 
@@ -144,11 +145,8 @@ float* predict(Tfcnn* net, float* inputs)
   return a;
 }
 
-Tfcnn* sex(Tfcnn* dad, Tfcnn* mum)
+Tfcnn* sex(const Tfcnn* dad, const Tfcnn* mum, int mutationRareness)
 {
-  #warning sex not implemented
-  
-  /*
   Tfcnn* baby = malloc(sizeof(Tfcnn));
   baby->layerCount = dad->layerCount;
   baby->neuronsInLayersCount = malloc(baby->layerCount * sizeof(int));
@@ -159,12 +157,24 @@ Tfcnn* sex(Tfcnn* dad, Tfcnn* mum)
   for(int i = 1; i < baby->layerCount; ++i){
     baby->neuronsInLayersCount[i] = dad->neuronsInLayersCount[i];
 
-    baby->neurons[i-1] = malloc(baby->neuronsInLayersCount[i] * sizeof(Tneuron*));
+    baby->neurons[i-1] = malloc(baby->neuronsInLayersCount[i] *
+                                sizeof(Tneuron*));
     for(int j = 0; j < baby->neuronsInLayersCount[i]; ++j){
-      baby->neurons[i-1][j] = initRandNeuron(baby->neuronsInLayersCount[i-1],
-                                          MIN_RAND_WEIGHT,
-                                          MAX_RAND_WEIGHT);
+      
+      if(mutationRareness > 0 && rand() > (RAND_MAX / mutationRareness)){
+        baby->neurons[i-1][j] = initRandNeuron(baby->neuronsInLayersCount[i-1],
+                                               MIN_RAND_WEIGHT,
+                                               MAX_RAND_WEIGHT);
+      } else {
+        if(rand() > RAND_MAX/2){
+          baby->neurons[i-1][j] = cpyNeuron(dad->neurons[i-1][j]);
+        } else {
+          baby->neurons[i-1][j] = cpyNeuron(mum->neurons[i-1][j]);
+        }
+      }
     }
   }
-  */
+  
+
+  return baby;
 }
