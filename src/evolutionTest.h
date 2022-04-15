@@ -17,6 +17,11 @@ void insertSort(Tfcnn** population,
                 float* keys,
                 bool increasing);
 
+float calculateErrorRate(const Tfcnn* net, float* testIn, float* testOut);
+
+int lineToTestInOut(char* line, Tfcnn** population,
+                    float* testIn, float* testOut);
+
 void sortByFitness(Tfcnn** population, int populationCount, FILE* file);
 
 void evolutionTest(void);

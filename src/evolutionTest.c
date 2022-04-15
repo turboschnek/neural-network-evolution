@@ -16,7 +16,7 @@
 
 
 
-#define NET_STRUCT_LAYER_COUNT 2
+#define NET_STRUCT_LAYER_COUNT 3
 
 void insertSort(Tfcnn** population, int populationCount, float* keys, bool increasing)
 {
@@ -50,9 +50,55 @@ void insertSort(Tfcnn** population, int populationCount, float* keys, bool incre
   }
 }
 
+float calculateErrorRate(const Tfcnn* net, float* testIn, float* testOut)
+{
+  float* prediction = predict(net, testIn);
+      
+  float errorRate = 0;
+  for(int i = 0;
+      i < net->neuronsInLayersCount[net->layerCount - 1];
+      ++i){
+  
+    //printf("P:%f\n", prediction[k]);
+    errorRate += fabs(prediction[i] - testOut[i]);
+  }
+
+  free(prediction);
+
+  return errorRate;
+}
+
+int lineToTestInOut(char* line, Tfcnn** population,
+                    float* testIn, float* testOut)
+{
+  int i = 0;
+  char *delim = " ";
+  char *token = NULL;
+  for (token = strtok(line, delim);
+        token != NULL;
+        token = strtok(NULL, delim))
+  {
+    char *unconverted;
+    float value = strtof(token, &unconverted);
+    if (!isspace(*unconverted) && *unconverted != 0)
+    {
+      fprintf(stderr, "ERROR: incorrect data in file");
+      return -1;
+    }
+    
+    if(i < population[0]->neuronsInLayersCount[0]){
+      testIn[i++] = value;
+    } else {
+      testOut[(i++) - population[0]->neuronsInLayersCount[0]] = value;
+    }
+  }
+
+  return 0;
+}
+
 void sortByFitness(Tfcnn** population, int populationCount, FILE* file)
 {
-  float* fitnesses = calloc(populationCount, sizeof(float));
+  float* errorRates = calloc(populationCount, sizeof(float));
 
 
   const int maxLen = 100;
@@ -63,68 +109,29 @@ void sortByFitness(Tfcnn** population, int populationCount, FILE* file)
                           sizeof(float));
   while (fgets(line, maxLen, file))
   {
-    int i = 0;
-
     // Remove trailing newline
     line[strcspn(line, "\n")] = '\0';
     
-    //convert string to array of floats
-    char *delim = " ";
-    char *token = NULL;
-    for (token = strtok(line, delim);
-         token != NULL;
-         token = strtok(NULL, delim))
-    {
-      char *unconverted;
-      float value = strtof(token, &unconverted);
-      if (!isspace(*unconverted) && *unconverted != 0)
-      {
-        fprintf(stderr, "ERROR: incorrect data in file");
-        free(fitnesses);
-        free(testIn);
-        free(testOut);
-        return;
-      }
-      
-      if(i < population[0]->neuronsInLayersCount[0]){
-        testIn[i++] = value;
-      } else {
-        testOut[(i++) - population[0]->neuronsInLayersCount[0]] = value;
-      }
+    if(lineToTestInOut(line, population, testIn, testOut) == -1){
+      free(errorRates);
+      free(testIn);
+      free(testOut);
+      return;
     }
     
-
-
-
-    //print testIn testOut
-    /*for(int j = 0; j < i; ++j){
-      printf("%f ", testIn[j]);
-    }
-    printf("\n");*/
     
     for(int j = 0; j < populationCount; ++j){
-      float* prediction = predict(population[j], testIn);
-      
-      for(int k = 0;
-          k < population[0]->neuronsInLayersCount[population[0]->layerCount - 1];
-          ++k){
-      
-        //printf("P:%f\n", prediction[k]);
-        fitnesses[j] += fabs(prediction[k] - testOut[k]);
-      }
-      
-
-      free(prediction);
+      errorRates[j] = calculateErrorRate(population[j], testIn, testOut);
     }
   }
 
-  insertSort(population, populationCount, fitnesses, true);
+  insertSort(population, populationCount, errorRates, true);
 
   for(int i = 0; i < populationCount; ++i){
-    printf("E:%f %d\n", fitnesses[i], i);
+    printf("E:%f %d\n", errorRates[i], i);
   }
 
-  free(fitnesses);
+  free(errorRates);
   free(testIn);
   free(testOut);
 }
@@ -132,11 +139,11 @@ void sortByFitness(Tfcnn** population, int populationCount, FILE* file)
 void evolutionTest()
 {
    
-  const int netStructure[NET_STRUCT_LAYER_COUNT] = {2, 1};
+  const int netStructure[NET_STRUCT_LAYER_COUNT] = {2, 2, 1};
 
   const int populationCount = 100;  //number of networks in population
   
-  const int lastGeneration = 100;  //number of generations in simulation
+  const int maxGenerationCount = 100;  //number of generations in simulation
   
   const int matingFraction = 2;  // 1/matingFraction of nets has a baby
 
@@ -150,7 +157,7 @@ void evolutionTest()
   
   
 
-  for(int generation = 0; generation < lastGeneration; ++generation){
+  for(int generation = 0; generation < maxGenerationCount; ++generation){
 
     
     FILE* file = fopen("../src/test_dataset.txt", "r");
@@ -170,12 +177,12 @@ void evolutionTest()
     
     
     int elderyCount = populationCount/matingFraction;
-    for(int i = 0; i < elderyCount; ++i){
-      freefcnn(population[i + (elderyCount)]);
+    for(int i = elderyCount; i < populationCount; ++i){
+      freefcnn(population[i]);
 
-      population[i + (elderyCount)] = sex(population[i],
-                                          population[(i+1) % ((elderyCount) - 1)],
-                                          mutationRareness);
+      population[i] = sex(population[(i - elderyCount) % elderyCount],
+                                     population[(i+1) % elderyCount],
+                                     mutationRareness);
     }
     printf("\nalphamale:\n");
     printfcnn(population[0]);
