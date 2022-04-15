@@ -1,5 +1,5 @@
 /**
- * Project:  neural network
+ * Project:  evolution algorithm
  * Author:   Jakub Urbanek
  * Year:     2022
  */
@@ -12,7 +12,7 @@
 #include "neuron.h"
 
 
-//fully connected neural network
+//fully connected evolution algorithm
 typedef struct
 {
   //nuber of layers including input and output layer
@@ -27,12 +27,12 @@ typedef struct
 } Tfcnn;
 
 /**
- * intits random fully connected neural network of given size
+ * intits random fully connected evolution algorithm of given size
  */
 Tfcnn* initRandfcnn(int layerCount, const int* neuronsInLayersCount);
 
 /**
- * frees fully connected neural network
+ * frees fully connected evolution algorithm
  */
 void freefcnn(Tfcnn* net);
 

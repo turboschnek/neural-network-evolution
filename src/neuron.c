@@ -1,5 +1,5 @@
 /**
- * Project:  neural network
+ * Project:  evolution algorithm
  * Author:   Jakub Urbanek
  * Year:     2022
  */
