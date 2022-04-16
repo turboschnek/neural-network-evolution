@@ -146,7 +146,9 @@ void evolutionTest()
 
   const int populationCount = 100;  //number of networks in population
   
-  const int maxGenerationCount = 100;  //number of generations in simulation
+  const int maxGenerationCount = 100;  // max number of generations in simulation
+  
+  float targetErrorRate = 0.000001;  // simulation stops after reaching this errRate
   
   const int matingFraction = 2;  // 1/matingFraction of nets has a baby
 
@@ -161,7 +163,6 @@ void evolutionTest()
   
 
   bool isAccurate = false;
-  float targetAccuracy = 0.000001;
   for(int generation = 0;
       (generation < maxGenerationCount) && (!isAccurate);
       ++generation){
@@ -181,7 +182,7 @@ void evolutionTest()
 
     isAccurate = (sortByFitness(population,
                                 populationCount,
-                                dataset) < targetAccuracy);
+                                dataset) < targetErrorRate);
     
     fclose(dataset);
 
