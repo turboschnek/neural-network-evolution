@@ -12,7 +12,7 @@
 #include "neuron.h"
 
 
-//fully connected evolution algorithm
+//fully connected neural network
 typedef struct
 {
   //nuber of layers including input and output layer
@@ -21,31 +21,61 @@ typedef struct
   //number of neurons for each layer
   int* neuronsInLayersCount;
 
-  //pointers to all neurons in network
+  /**
+   * array of arrays of pointers to all neurons in network
+   * 
+   * there is one less layer than above layers state,
+   * because input neurons are not neurons
+   */
   Tneuron*** neurons;
 
 } Tfcnn;
 
 /**
- * intits random fully connected evolution algorithm of given size
+ * intits random fully connected neural network of given size
  */
 Tfcnn* initRandfcnn(int layerCount, const int* neuronsInLayersCount);
 
 /**
- * frees fully connected evolution algorithm
+ * frees fully connected neural network
  */
 void freefcnn(Tfcnn* net);
 
+/**
+ * prints fully connected neural network to stdout
+ */
 void printfcnn(const Tfcnn* n);
 
+/**
+ * prints fully connected neural network to file
+ */
 void fprintfcnn(FILE* out, const Tfcnn* n);
 
+/**
+ * scans fully connected neural network from stdin
+ * 
+ * @return initialized fcnn or NULL for error
+ */
 Tfcnn* scanfcnn(void);
 
+/**
+ * scans fully connected neural network from file
+ * 
+ * @return initialized fcnn or NULL for error
+ */
 Tfcnn* fscanfcnn(FILE* in);
 
+/**
+ * returns array of outputs of neurons in layer (layerIndex) based on inputs
+ * to this layer
+ */
 float* propagateLayer(const Tfcnn* net, const float* inputs, int layerIndex);
 
+/**
+ * returns array of outputs of neural network
+ * 
+ * @param inputs inputs of neural network
+ */
 float* predict(const Tfcnn* net, const float* inputs);
 
 /**

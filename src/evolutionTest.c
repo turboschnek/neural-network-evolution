@@ -4,7 +4,6 @@
  * Year:     2022
  */
 
-//this module tests evolution of network by forcing it to learn to do XOR
 
 
 #include "fcnn.h"
@@ -71,25 +70,21 @@ float calculateErrorRate(const Tfcnn* net, float* testIn, float* testOut)
 int lineToTestInOut(char* line, Tfcnn** population,
                     float* testIn, float* testOut)
 {
-  int i = 0;
-  char *delim = " ";
-  char *token = NULL;
-  for (token = strtok(line, delim);
-        token != NULL;
-        token = strtok(NULL, delim))
+  const int testInCount = population[0]->neuronsInLayersCount[0];
+  const int testOutCount = population[0]->neuronsInLayersCount[population[0]->layerCount - 1];
+  
+  char* p = strtok(line, " ");
+  for (int i = 0; p != NULL; p = strtok(NULL, " "))
   {
-    char *unconverted;
-    float value = strtof(token, &unconverted);
-    if (!isspace(*unconverted) && *unconverted != 0)
-    {
-      fprintf(stderr, "ERROR: incorrect data in file");
-      return -1;
-    }
+    float number = strtof(p, NULL);
     
-    if(i < population[0]->neuronsInLayersCount[0]){
-      testIn[i++] = value;
+    if(i < testInCount){
+      testIn[i++] = number;
+    } else if(i < testInCount + testOutCount) {
+      testOut[(i++) - testInCount] = number;
     } else {
-      testOut[(i++) - population[0]->neuronsInLayersCount[0]] = value;
+      fprintf(stderr, "unable to read file");
+      return -1;
     }
   }
 

@@ -9,11 +9,20 @@
 
 #include <stdio.h>
 
+/**
+ * neuron to be used in neural network
+ * 
+ * 
+ */
 typedef struct {
+
+  //number of inputs of neuron
   int inputCount;
 
+  //array of weights (obviously)
   float* weights;
 
+  //bias (obviously)
   float bias;
 
 } Tneuron;
@@ -78,6 +87,9 @@ Tneuron* cpyNeuron(const Tneuron* origin);
  */
 float sigmoid(float x);
 
+/**
+ * takes array of inputs and returns output of neuron
+ */
 float calcNeuronOutput(const Tneuron* n, const float* inputs);
 
 #endif
