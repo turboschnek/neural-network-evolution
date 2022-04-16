@@ -22,7 +22,10 @@ float calculateErrorRate(const Tfcnn* net, float* testIn, float* testOut);
 int lineToTestInOut(char* line, Tfcnn** population,
                     float* testIn, float* testOut);
 
-void sortByFitness(Tfcnn** population, int populationCount, FILE* file);
+/**
+ * returns error rate of best net
+ */
+float sortByFitness(Tfcnn** population, int populationCount, FILE* file);
 
 void evolutionTest(void);
 

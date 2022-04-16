@@ -96,7 +96,7 @@ int lineToTestInOut(char* line, Tfcnn** population,
   return 0;
 }
 
-void sortByFitness(Tfcnn** population, int populationCount, FILE* file)
+float sortByFitness(Tfcnn** population, int populationCount, FILE* file)
 {
   float* errorRates = calloc(populationCount, sizeof(float));
 
@@ -116,12 +116,12 @@ void sortByFitness(Tfcnn** population, int populationCount, FILE* file)
       free(errorRates);
       free(testIn);
       free(testOut);
-      return;
+      return INFINITY;
     }
     
     
     for(int j = 0; j < populationCount; ++j){
-      errorRates[j] = calculateErrorRate(population[j], testIn, testOut);
+      errorRates[j] += calculateErrorRate(population[j], testIn, testOut);
     }
   }
 
@@ -131,9 +131,12 @@ void sortByFitness(Tfcnn** population, int populationCount, FILE* file)
     printf("E:%f %d\n", errorRates[i], i);
   }
 
+  float bestErrRate = errorRates[0];
+
   free(errorRates);
   free(testIn);
   free(testOut);
+  return bestErrRate;
 }
 
 void evolutionTest()
@@ -157,11 +160,15 @@ void evolutionTest()
   
   
 
-  for(int generation = 0; generation < maxGenerationCount; ++generation){
+  bool isAccurate = false;
+  float targetAccuracy = 0.000001;
+  for(int generation = 0;
+      (generation < maxGenerationCount) && (!isAccurate);
+      ++generation){
 
     
-    FILE* file = fopen("../src/test_dataset.txt", "r");
-    if(file == NULL){
+    FILE* dataset = fopen("../data/test_dataset(XOR).txt", "r");
+    if(dataset == NULL){
       fprintf(stderr, "ERROR: unable to open file");
       for(int i = 0; i < populationCount; ++i){
         freefcnn(population[i]);
@@ -170,9 +177,13 @@ void evolutionTest()
       return;
     }
 
-    sortByFitness(population, populationCount, file);
+    printf("Generation %d\n", generation);
+
+    isAccurate = (sortByFitness(population,
+                                populationCount,
+                                dataset) < targetAccuracy);
     
-    fclose(file);
+    fclose(dataset);
 
     
     
@@ -184,8 +195,19 @@ void evolutionTest()
                                      population[(i+1) % elderyCount],
                                      mutationRareness);
     }
-    printf("\nalphamale:\n");
-    printfcnn(population[0]);
+    
+    FILE* save = fopen("../data/XOR_network.txt", "w");
+    if(save == NULL){
+      fprintf(stderr, "ERROR: unable to open file");
+      for(int i = 0; i < populationCount; ++i){
+        freefcnn(population[i]);
+      }
+      free(population);
+      return;
+    }
+    fprintfcnn(save, population[0]);
+
+    fclose(save);
   }
 
   
