@@ -4,6 +4,7 @@
  * Year:     2022
  */
 
+
 #ifndef __MODULE_EVOLUTION_TEST_H
 #define __MODULE_EVOLUTION_TEST_H
 
@@ -27,6 +28,10 @@ int lineToTestInOut(char* line, Tfcnn** population,
  */
 float sortByFitness(Tfcnn** population, int populationCount, FILE* file);
 
+
+/**
+ * tests evolution of network by forcing it to learn to do XOR
+ */
 void evolutionTest(void);
 
 #endif

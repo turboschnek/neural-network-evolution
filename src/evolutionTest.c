@@ -4,6 +4,9 @@
  * Year:     2022
  */
 
+//this module tests evolution of network by forcing it to learn to do XOR
+
+
 #include "fcnn.h"
 #include "neuron.h"
 #include "evolutionTest.h"
@@ -14,9 +17,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-
-
-#define NET_STRUCT_LAYER_COUNT 3
 
 void insertSort(Tfcnn** population, int populationCount, float* keys, bool increasing)
 {
@@ -142,7 +142,8 @@ float sortByFitness(Tfcnn** population, int populationCount, FILE* file)
 void evolutionTest()
 {
    
-  const int netStructure[NET_STRUCT_LAYER_COUNT] = {2, 2, 1};
+  const int netStructure[3] = {2, 2, 1};
+  const int netStructureLayerCount = sizeof(netStructure) / sizeof(*netStructure);
 
   const int populationCount = 100;  //number of networks in population
   
@@ -157,7 +158,7 @@ void evolutionTest()
   //intit random population
   Tfcnn** population = malloc(populationCount * sizeof(Tfcnn*));
   for(int i = 0; i < populationCount; ++i){
-    population[i] = initRandfcnn(NET_STRUCT_LAYER_COUNT, netStructure);
+    population[i] = initRandfcnn(netStructureLayerCount, netStructure);
   }
   
   
@@ -178,7 +179,6 @@ void evolutionTest()
       return;
     }
 
-    printf("Generation %d\n", generation);
 
     isAccurate = (sortByFitness(population,
                                 populationCount,
@@ -186,6 +186,7 @@ void evolutionTest()
     
     fclose(dataset);
 
+    printf("↑Generation %d\n\n", generation);
     
     
     int elderyCount = populationCount/matingFraction;
@@ -216,4 +217,10 @@ void evolutionTest()
     freefcnn(population[i]);
   }
   free(population);
+
+  if(isAccurate){
+    printf("\nevolution succesful\n");
+  } else {
+    printf("\nevolution unsuccesful\n");
+  }
 }
